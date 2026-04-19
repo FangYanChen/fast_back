@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const app = express();
 
@@ -6,7 +8,10 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api", (req, res) => {
-  res.json({ message: "Hello from API" });
+  res.json({
+    message: "Hello from API",
+    token: process.env.TOKEN
+  });
 });
 
 const PORT = process.env.PORT || 3000;
