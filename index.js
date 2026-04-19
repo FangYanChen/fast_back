@@ -1,17 +1,30 @@
 require("dotenv").config();
 
 const express = require("express");
+const { Pool } = require("pg");
+
 const app = express();
+
+// подключение к базе
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+// тестовый endpoint
+app.get("/users", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW()");
+    res.json({
+      message: "Database works ✅",
+      time: result.rows[0],
+    });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Backend is working 🚀");
-});
-
-app.get("/api", (req, res) => {
-  res.json({
-    message: "Hello from API",
-    token: process.env.TOKEN
-  });
 });
 
 const PORT = process.env.PORT || 3000;
